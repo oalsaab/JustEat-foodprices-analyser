@@ -1,0 +1,16 @@
+{
+  "name": "justeat-foodprices-analyser",
+  "version": "1.0.0",
+  "description": "Collect food prices from JustEat for a given postcode and array of foods and perform simple analysis on the data",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omar Alsaab",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^15.1.1",
+    "puppeteer-extra": "^3.3.0",
+    "puppeteer-extra-plugin-stealth": "^2.10.1"
+  }
+}
