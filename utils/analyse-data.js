@@ -1,3 +1,5 @@
+const method = require('./methods');
+
 function mergeData(foods, data) {
   let concatenatedData = {};
   let matchedRestaurants = new Set();
@@ -28,54 +30,46 @@ function createTable(concatenatedData) {
 
   for (let [food, prices] of Object.entries(concatenatedData)) {
     console.log(`Total number of items found with ${food}: ${prices.length}`);
+
+    const median = method.medianCalc(prices);
+    const mean = method.meanCalc(prices);
+    const mode = method.modeCalc(prices);
+    const range = method.rangeCalc(prices);
+    const IQR = method.interquartileRangeCalc(prices);
+    const standardDev = method.standardDeviationCalc(prices, mean);
+    const skew = method.pearsonModeSkewness(mean, mode, standardDev);
+
     result[food] = {
-      median: median(prices) / 100,
-      mean: mean(prices) / 100,
-      mode: mode(prices) / 100,
-      range: range(prices).map((el) => el / 100),
+      median: median,
+      mean: mean,
+      mode: mode,
+      range: range,
+      IQR: IQR,
+      SD: standardDev,
+      skew: skew,
     };
   }
+
+  Object.keys(result).forEach(function (foods) {
+    let food = result[foods];
+    Object.keys(food).forEach(function (price) {
+      food[price] = toPound(food[price]);
+    });
+  });
 
   return result;
 }
 
-function median(arr) {
-  let sorted = arr.sort((a, b) => a - b);
-  let half = Math.floor(sorted.length / 2);
-
-  if (sorted.length % 2 == 0) {
-    return (sorted[half - 1] + sorted[half]) / 2;
+function toPound(value) {
+  if (Array.isArray(value)) {
+    return value.map((el) => toPound(el));
   }
 
-  return sorted[half];
-}
-
-function mean(arr) {
-  return Math.round(arr.reduce((sum, value) => sum + value, 0) / arr.length);
-}
-
-function range(arr) {
-  let sorted = arr.sort((a, b) => a - b);
-  return [sorted[0], sorted[sorted.length - 1]];
-}
-
-function mode(arr) {
-  let frequency = {};
-  let max = 0;
-  let mode = null;
-
-  for (let price of arr) {
-    frequency[price] = (frequency[price] || 0) + 1;
+  if (value < 1) {
+    return Math.round(value * 1000) / 1000;
   }
 
-  for (let [num, freq] of Object.entries(frequency)) {
-    if (freq > max) {
-      max = freq;
-      mode = num;
-    }
-  }
-
-  return Number(mode);
+  return Math.round((value / 100) * 100) / 100;
 }
 
 module.exports = {
