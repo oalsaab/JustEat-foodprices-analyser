@@ -52,12 +52,20 @@ function createTable(concatenatedData) {
 
   Object.keys(result).forEach(function (foods) {
     let food = result[foods];
-    Object.keys(food).forEach(function (price) {
-      food[price] = toPound(food[price]);
+    Object.keys(food).forEach(function (method) {
+      if (method == 'skew') {
+        food[method] = skewRound(food[method]);
+      } else {
+        food[method] = toPound(food[method]);
+      }
     });
   });
 
   return result;
+}
+
+function skewRound(value) {
+  return Math.round(value * 1000) / 1000;
 }
 
 function toPound(value) {
@@ -66,7 +74,7 @@ function toPound(value) {
   }
 
   if (value < 1) {
-    return Math.round(value * 1000) / 1000;
+    return Math.round((value / 100) * 1000) / 1000;
   }
 
   return Math.round((value / 100) * 100) / 100;
