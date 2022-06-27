@@ -12,6 +12,7 @@ Please note that the app will not account for differences in portion size of the
 
 Edit the provided input.js file in the root directory and provide your postcode and the food(s) you wish to search for.
 It is recommended that you use the singular noun of the food, e.g. "Burger" instead of "Burgers".
+
 Example:
 
 ```
